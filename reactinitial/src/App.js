@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Character from "./components/Character";
 import LoadingMask from "./components/LoadingMask";
+import Subscription from "./components/Subscription";
 
 const App = () => {
   const [characters, setCharacters] = useState(null);
+  const [delayedComponent, setDelayedComponent] = useState(false);
 
   useEffect(() => {
     const characters = async () => {
@@ -15,6 +17,20 @@ const App = () => {
     };
     characters();
   }, []);
+
+  useEffect(() => {
+    setInterval(() => {
+      setDelayedComponent(true);
+    }, 10000);
+  }, []);
+
+  const pull_data = (data, e) => {
+    if (data !== "") {
+      setTimeout(() => {
+        setDelayedComponent(false);
+      }, 5000);
+    }
+  };
 
   return (
     <div>
@@ -30,6 +46,7 @@ const App = () => {
       ) : (
         <LoadingMask />
       )}
+      {delayedComponent && <Subscription func={pull_data} />}
     </div>
   );
 };
